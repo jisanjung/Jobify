@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import './App.css';
 import ReactMapGL from "react-map-gl";
-import Button from "@mui/material/Button";
+import Sidebar from "./components/Sidebar";
+import { Grid } from "@mui/material";
 
 function App() {
 
@@ -14,15 +15,19 @@ function App() {
   });
 
   return (
-    <div className="App">
-      <ReactMapGL 
-      {...viewport}
-      mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-      onViewportChange={(viewport) => setViewport(viewport)}
-      mapStyle="mapbox://styles/jsonjung/ckx7qkqd423gj14s6axbpff2p">
-        markers
-      </ReactMapGL>
-    </div>
+    <Grid container sx={{overflow: 'hidden'}}>
+      <Grid item xs={12} md={4} lg={3}>
+        <Sidebar/>
+      </Grid>
+      <Grid item xs={12} md={8} lg={9}>
+        <ReactMapGL 
+        {...viewport}
+        mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+        onViewportChange={(viewport) => setViewport(viewport)}
+        mapStyle="mapbox://styles/jsonjung/ckx7qkqd423gj14s6axbpff2p">
+        </ReactMapGL>
+      </Grid>
+    </Grid>
   );
 }
 
