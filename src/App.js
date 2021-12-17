@@ -3,6 +3,7 @@ import './App.css';
 import ReactMapGL from "react-map-gl";
 import Sidebar from "./components/Sidebar";
 import { Grid } from "@mui/material";
+import Header from "./components/Header";
 
 function App() {
 
@@ -16,6 +17,9 @@ function App() {
 
   return (
     <Grid container sx={{overflow: 'hidden'}}>
+      <Grid item xs={12}>
+        <Header/>
+      </Grid>
       <Grid item xs={12} md={4} lg={3}>
         <Sidebar/>
       </Grid>
