@@ -36,13 +36,11 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Grid container sx={{overflow: 'hidden'}}>
-        <Grid item xs={12}>
-          <Header/>
-        </Grid>
         <Grid item xs={12} md={4} lg={3}>
           <Sidebar/>
         </Grid>
         <Grid item xs={12} md={8} lg={9}>
+          <Header/>
           <ReactMapGL 
           {...viewport}
           mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
