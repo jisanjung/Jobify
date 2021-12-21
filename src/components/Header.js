@@ -4,7 +4,7 @@ import React from 'react';
 const Header = () => {
 
     return (
-        <AppBar sx={{ p: 3, boxShadow: 3, zIndex: 10 }} position="relative">
+        <AppBar sx={{ p: 3, boxShadow: 3, zIndex: 10 }} position="absolute">
             <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Typography variant="h5" component="h1">
                     Jobify

@@ -5,14 +5,17 @@ import Sidebar from "./components/Sidebar";
 import { Grid } from "@mui/material";
 import Header from "./components/Header";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useMediaQuery } from "@mui/material"; 
 
 function App() {
+
+  const lgMatches = useMediaQuery("(min-width:900px)");
 
   const [viewport, setViewport] = useState({
     latitude: 40.241562,
     longitude: -75.283737,
     width: "100vw",
-    height: "100vh",
+    height: "100%",
     zoom: 10
   });
 
@@ -39,13 +42,14 @@ function App() {
         <Grid item xs={12} md={4} lg={3}>
           <Sidebar/>
         </Grid>
-        <Grid item xs={12} md={8} lg={9}>
+        <Grid item xs={12} md={8} lg={9} sx={{ position: "relative" }}>
           <Header/>
           <ReactMapGL 
           {...viewport}
           mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
           onViewportChange={(viewport) => setViewport(viewport)}
-          mapStyle="mapbox://styles/jsonjung/ckx7qkqd423gj14s6axbpff2p">
+          mapStyle="mapbox://styles/jsonjung/ckx7qkqd423gj14s6axbpff2p"
+          height={lgMatches ? "100vh" : "50vh"}>
           </ReactMapGL>
         </Grid>
       </Grid>
