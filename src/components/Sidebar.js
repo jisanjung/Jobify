@@ -1,5 +1,6 @@
-import { Container, useMediaQuery, TextField } from '@mui/material'
+import { Container, useMediaQuery } from '@mui/material'
 import React from 'react'
+import Input from './Input';
 
 const Sidebar = () => {
 
@@ -16,10 +17,8 @@ const Sidebar = () => {
             background: "#fff"
         }} style={{ paddingTop: "1rem", paddingBottom: "1rem", overflow: "scroll" }}>
             <form>
-                <TextField label="Zip Code" variant="standard"
-                sx={{ width: "100%", marginBottom: "0.5rem" }}/>
-                <TextField label="Keyword" variant="standard"
-                sx={{ width: "100%" }}/>
+                <Input label="Zip Code" variant="standard" sx={{width: "100%", marginBottom: "0.5rem"}} regex={/^\d{5}(?:[-\s]\d{4})?$/}/>
+                <Input label="Keyword (Engineer, Analyst, etc.)" variant="standard" sx={{width: "100%"}} regex={/.*/}/>
             </form>
         </Container>
     )
