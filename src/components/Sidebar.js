@@ -1,4 +1,4 @@
-import { Container, useMediaQuery } from '@mui/material'
+import { Container, useMediaQuery, TextField } from '@mui/material'
 import React from 'react'
 
 const Sidebar = () => {
@@ -14,8 +14,13 @@ const Sidebar = () => {
             right: 0,
             zIndex: "10",
             background: "#fff"
-        }}>
-            sidebar
+        }} style={{ paddingTop: "1rem", paddingBottom: "1rem", overflow: "scroll" }}>
+            <form>
+                <TextField label="Zip Code" variant="standard"
+                sx={{ width: "100%", marginBottom: "0.5rem" }}/>
+                <TextField label="Keyword" variant="standard"
+                sx={{ width: "100%" }}/>
+            </form>
         </Container>
     )
 }

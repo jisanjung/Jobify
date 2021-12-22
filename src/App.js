@@ -11,6 +11,7 @@ function App() {
 
   const lgMatches = useMediaQuery("(min-width:900px)");
 
+  // for react map component
   const [viewport, setViewport] = useState({
     latitude: 40.241562,
     longitude: -75.283737,
