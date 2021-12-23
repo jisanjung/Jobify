@@ -8,14 +8,25 @@ const Input = (props) => {
     const validate = input => {
         if (!props.regex.test(input) || !input) {
             setError(true);
+            props.setError(true);
         } else {
             setError(false);
+            props.setError(false);
         }
     }
 
     return (
-        <TextField label={props.label} variant={props.variant} sx={props.sx} regex={props.regex} error={error} helperText={error ? `Enter valid ${props.label.toLowerCase()}` : ""}
-        onBlur={e => validate(e.target.value)}/>
+        <TextField 
+            label={props.label} 
+            variant={props.variant} 
+            sx={props.sx} 
+            regex={props.regex} 
+            error={error} 
+            helperText={error ? `Enter valid ${props.label.toLowerCase()}` : ""}
+            onBlur={e => validate(e.target.value)}
+            onChange={e => props.setInput(e.target.value)}
+            required
+        />
     )
 }
 
