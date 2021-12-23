@@ -24,7 +24,10 @@ const Input = (props) => {
             error={error} 
             helperText={error ? `Enter valid ${props.label.toLowerCase()}` : ""}
             onBlur={e => validate(e.target.value)}
-            onChange={e => props.setInput(e.target.value)}
+            onChange={e => {
+                props.setInput(e.target.value);
+                validate(e.target.value);
+            }}
             required
         />
     )
