@@ -20,9 +20,15 @@ const Sidebar = () => {
     }, [zipCodeError, keywordError]);
 
     const handleSearch = e => {
+        let baseURL = `https://api.adzuna.com/v1/api/jobs/us/search/1?app_id=${process.env.REACT_APP_ADZUNA_APPID}&app_key=${process.env.REACT_APP_ADZUNA_KEY}`;
+
         e.preventDefault();
         console.log(zipCode);
         console.log(keyword);
+        
+        fetch(`${baseURL}&where=${zipCode}&title_only=${keyword}`)
+        .then(res => res.json())
+        .then(data => console.log(data));
     }
 
     return (
