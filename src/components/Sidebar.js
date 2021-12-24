@@ -1,6 +1,7 @@
 import { Button, Container, useMediaQuery } from '@mui/material'
 import React, { useState, useEffect } from 'react'
 import Input from './Input';
+import JobList from './jobs/JobList';
 
 const Sidebar = () => {
 
@@ -65,6 +66,7 @@ const Sidebar = () => {
                     Search
                 </Button>
             </form>
+            <JobList jobList={jobList}/>
         </Container>
     )
 }
