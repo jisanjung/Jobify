@@ -39,7 +39,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Grid container sx={{overflow: 'hidden'}}>
+      <Grid container>
         <Grid item xs={12} md={4} lg={3}>
           <Sidebar/>
         </Grid>

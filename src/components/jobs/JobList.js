@@ -4,7 +4,7 @@ import React from 'react';
 
 const JobList = (props) => {
     return (
-        <List>
+        <List sx={{ marginTop: 2 }}>
             {props.jobList.map(job => {
                 return (
                     <ListItem key={job.id} sx={{ p: 0 }}>

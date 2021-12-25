@@ -37,7 +37,9 @@ const Sidebar = () => {
     }, [jobList]);
 
     return (
-        <Container sx={lgMatches ? {} : {
+        <Container sx={lgMatches ? {
+            height: "100vh"
+        } : {
             position: "absolute",
             bottom: 0,
             top: "50%",
@@ -45,7 +47,7 @@ const Sidebar = () => {
             right: 0,
             zIndex: "10",
             background: "#fff"
-        }} style={{ paddingTop: "1rem", paddingBottom: "1rem"}}>
+        }} style={{ paddingTop: "1rem", paddingBottom: "1rem", overflowY: "scroll" }}>
             <form onSubmit={e => handleSearch(e)}>
                 <Input 
                     label="Zip Code" 
