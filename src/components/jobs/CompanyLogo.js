@@ -17,7 +17,7 @@ const CompanyLogo = (props) => {
                 src={brokenImg ? logoReplacement : URL} 
                 alt={props.company} 
                 onError={() => setBrokenImg(true)}
-                style={{ objectFit: "cover", width: "100%", height: "100%" }}
+                style={{ objectFit: "cover", width: "100%", height: "100%", borderRadius: "4px" }}
             />
         </Box>
     )
