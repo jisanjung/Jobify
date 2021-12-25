@@ -45,13 +45,15 @@ function App() {
         </Grid>
         <Grid item xs={12} md={8} lg={9} sx={{ position: "relative" }}>
           <Header/>
-          <ReactMapGL 
+          {/* <ReactMapGL 
           {...viewport}
           mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
           onViewportChange={(viewport) => setViewport(viewport)}
           mapStyle="mapbox://styles/jsonjung/ckx7qkqd423gj14s6axbpff2p"
           height={lgMatches ? "100vh" : "50vh"}>
-          </ReactMapGL>
+          </ReactMapGL> */}
+          <div style={{ width: "100%", height: "100vh", background: "#e3e3e3" }}>
+          </div>
         </Grid>
       </Grid>
     </ThemeProvider>
