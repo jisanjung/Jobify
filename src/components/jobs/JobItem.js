@@ -1,5 +1,5 @@
 import { Card, Typography, Box } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 import CompanyLogo from './CompanyLogo';
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -8,6 +8,8 @@ const JobItem = (props) => {
 
     dayjs.extend(relativeTime)
     const formatDate = dayjs(props.job.created).format("YYYY-MM-DD");
+
+    const [hovered, setHovered] = useState(false);
 
     return (
         <Card variant="outlined" sx={{ width: "100%", p: 2, marginBottom: 2 }}>
@@ -18,7 +20,7 @@ const JobItem = (props) => {
                 </Typography>
             </Box>
             <Box>
-                <Typography variant="body1" component="h1" sx={{ fontWeight: 'bold' }}>
+                <Typography variant="body1" component="h1" sx={{ fontWeight: 'bold', textDecoration: hovered ? "underline" : "none", cursor: "pointer" }} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
                     {props.job.title}
                 </Typography>
                 <Typography variant='body1' sx={{ color: "#757575" }}>
