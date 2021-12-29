@@ -26,7 +26,7 @@ const JobItem = (props) => {
             id={props.job.id}
             className="job-item"
             variant="outlined" 
-            sx={{ width: "100%", p: 2, marginBottom: 2, cursor: "pointer", boxShadow: hovered ? 1 : 0, borderColor: active ? "primary.main" : "" }} 
+            sx={{ width: "100%", p: 2, cursor: "pointer", boxShadow: hovered ? 1 : 0, borderColor: active ? "primary.main" : "" }} 
             onMouseEnter={() => setHovered(true)} 
             onMouseLeave={() => setHovered(false)}
         >
