@@ -2,6 +2,7 @@ import { Button, Container, useMediaQuery } from '@mui/material'
 import React, { useState, useEffect } from 'react'
 import Input from './Input';
 import JobList from './jobs/JobList';
+import NoResults from './NoResults';
 
 const Sidebar = () => {
 
@@ -12,6 +13,7 @@ const Sidebar = () => {
     const [keywordError, setKeywordError] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const [jobList, setJobList] = useState([]);
+    const [noResults, setNoResults] = useState(false);
 
     useEffect(() => {
         if (zipCodeError || keywordError) {
@@ -29,7 +31,13 @@ const Sidebar = () => {
         if (zipCode && keyword)
             fetch(`${baseURL}&where=${zipCode}&title_only=${keyword}`)
             .then(res => res.json())
-            .then(data => setJobList(data.results));
+            .then(data => {
+                if (data.results.length === 0) {
+                    return setNoResults(true);
+                }
+                setNoResults(false);
+                return setJobList(data.results);
+            });
     }
 
     useEffect(() => {
@@ -68,7 +76,11 @@ const Sidebar = () => {
                     Search
                 </Button>
             </form>
-            <JobList jobList={jobList}/>
+            {!noResults ? (
+                <JobList jobList={jobList}/>
+            ) : (
+                <NoResults text={`No results for "${keyword}"`}/>
+            )}
         </Container>
     )
 }
