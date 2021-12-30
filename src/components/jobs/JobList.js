@@ -8,7 +8,7 @@ const JobList = (props) => {
 
     return (
         <List sx={{ marginTop: 2 }}>
-            {props.jobList ? 
+            {props.jobList.length > 0 ? 
             <Typography variant="body2" sx={{ color: "#757575", marginBottom: 1 }}>
                 {props.jobList.length} jobs
             </Typography> :

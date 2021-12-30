@@ -1,9 +1,10 @@
-import { Button, Container, useMediaQuery, Box, Typography } from '@mui/material'
+import { Button, Container, useMediaQuery } from '@mui/material'
 import React, { useState, useEffect } from 'react'
 import Input from './Input';
 import JobList from './jobs/JobList';
 import NoResults from './NoResults';
-
+import { useStoreActions } from "easy-peasy";
+ 
 const Sidebar = () => {
 
     const lgMatches = useMediaQuery("(min-width:900px)");
@@ -14,6 +15,8 @@ const Sidebar = () => {
     const [disabled, setDisabled] = useState(false);
     const [jobList, setJobList] = useState([]);
     const [noResults, setNoResults] = useState(false);
+    
+    const setJobs = useStoreActions(actions => actions.setJobs);
 
     useEffect(() => {
         if (zipCodeError || keywordError) {
@@ -36,13 +39,10 @@ const Sidebar = () => {
                     return setNoResults(true);
                 }
                 setNoResults(false);
+                setJobs(data.results);
                 return setJobList(data.results);
             });
     }
-
-    useEffect(() => {
-        console.log(jobList);
-    }, [jobList]);
 
     return (
         <Container sx={lgMatches ? {

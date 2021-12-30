@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import './App.css';
-import ReactMapGL from "react-map-gl";
-import Sidebar from "./components/Sidebar";
-import { Grid } from "@mui/material";
-import Header from "./components/Header";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useMediaQuery } from "@mui/material"; 
-
+import { StoreProvider, createStore } from "easy-peasy";
+import model from "./model"; 
+import Main from "./components/Main";
+ 
 function App() {
 
-  const lgMatches = useMediaQuery("(min-width:900px)");
+  const store = createStore(model);
 
   // for react map component
   const [viewport, setViewport] = useState({
@@ -38,25 +37,11 @@ function App() {
   });
 
   return (
-    <ThemeProvider theme={theme}>
-      <Grid container>
-        <Grid item xs={12} md={4} lg={3}>
-          <Sidebar/>
-        </Grid>
-        <Grid item xs={12} md={8} lg={9} sx={{ position: "relative" }}>
-          <Header/>
-          {/* <ReactMapGL 
-          {...viewport}
-          mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-          onViewportChange={(viewport) => setViewport(viewport)}
-          mapStyle="mapbox://styles/jsonjung/ckx7qkqd423gj14s6axbpff2p"
-          height={lgMatches ? "100vh" : "50vh"}>
-          </ReactMapGL> */}
-          <div style={{ width: "100%", height: "100vh", background: "#e3e3e3" }}>
-          </div>
-        </Grid>
-      </Grid>
-    </ThemeProvider>
+    <StoreProvider store={store}>
+      <ThemeProvider theme={theme}>
+        <Main/>
+      </ThemeProvider>
+    </StoreProvider>
   );
 }
 
