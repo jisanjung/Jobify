@@ -1,4 +1,4 @@
-import { List, ListItem } from '@mui/material';
+import { List, ListItem, Typography } from '@mui/material';
 import JobItem from "./JobItem";
 import React, { useState } from 'react';
 
@@ -8,6 +8,11 @@ const JobList = (props) => {
 
     return (
         <List sx={{ marginTop: 2 }}>
+            {props.jobList ? 
+            <Typography variant="body2" sx={{ color: "#757575", marginBottom: 1 }}>
+                {props.jobList.length} jobs
+            </Typography> :
+            <></>}
             {props.jobList.map(job => {
                 return (
                     <ListItem 

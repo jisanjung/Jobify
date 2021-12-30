@@ -1,4 +1,4 @@
-import { Button, Container, useMediaQuery } from '@mui/material'
+import { Button, Container, useMediaQuery, Box, Typography } from '@mui/material'
 import React, { useState, useEffect } from 'react'
 import Input from './Input';
 import JobList from './jobs/JobList';
