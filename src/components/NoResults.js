@@ -3,7 +3,8 @@ import { Box } from '@mui/system'
 import React from 'react';
 import searchHouse from "../assets/undraw_house_searching_re_stk8.svg";
 
-const NoResults = (props) => {
+const NoResults = React.memo((props) => {
+
     return (
         <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", marginY: 8 }}>
             <Box sx={{ width: "200px" }}>
@@ -14,6 +15,6 @@ const NoResults = (props) => {
             </Typography>
         </Box>
     )
-}
+});
 
 export default NoResults

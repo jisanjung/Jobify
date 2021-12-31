@@ -78,7 +78,7 @@ const Sidebar = () => {
             {!noResults ? (
                 <JobList jobList={jobList}/>
             ) : (
-                <NoResults text={`No results for "${keyword}"`}/>
+                <NoResults keyWord={keyword} text="No results"/>
             )}
         </Container>
     )
