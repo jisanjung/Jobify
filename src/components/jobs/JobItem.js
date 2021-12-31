@@ -13,7 +13,7 @@ const JobItem = (props) => {
     const [active, setActive] = useState(false);
 
     useEffect(() => {
-        if (props.id === props.job.id) {
+        if (parseInt(props.id) === parseInt(props.job.id)) {
             setActive(!active)
         } else {
             setActive(false);
