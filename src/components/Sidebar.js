@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import Input from './Input';
 import JobList from './jobs/JobList';
 import NoResults from './NoResults';
-import { useStoreActions } from "easy-peasy";
+import { useStoreActions, useStoreState } from "easy-peasy";
  
 const Sidebar = () => {
 
@@ -13,10 +13,10 @@ const Sidebar = () => {
     const [zipCodeError, setZipCodeError] = useState(false);
     const [keywordError, setKeywordError] = useState(false);
     const [disabled, setDisabled] = useState(false);
-    const [jobList, setJobList] = useState([]);
     const [noResults, setNoResults] = useState(false);
     
     const setJobs = useStoreActions(actions => actions.setJobs);
+    const jobList = useStoreState(state => state.jobList);
 
     useEffect(() => {
         if (zipCodeError || keywordError) {
@@ -39,8 +39,7 @@ const Sidebar = () => {
                     return setNoResults(true);
                 }
                 setNoResults(false);
-                setJobs(data.results);
-                return setJobList(data.results);
+                return setJobs(data.results);
             });
     }
 
