@@ -1,6 +1,6 @@
 import { action } from "easy-peasy";
 
-export default {
+const globalState = {
     // state
     jobList: [],
     selectedJob: 0,
@@ -12,4 +12,6 @@ export default {
     setSelected: action((state, id) => {
         state.selectedJob = id;
     })
-}
+};
+
+export default globalState;
