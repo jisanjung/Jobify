@@ -1,10 +1,12 @@
 import { List, ListItem, Typography } from '@mui/material';
 import JobItem from "./JobItem";
 import React, { useState } from 'react';
+import { useStoreActions } from 'easy-peasy';
 
 const JobList = (props) => {
 
     const [id, setId] = useState(0);
+    const setSelected = useStoreActions(actions => actions.setSelected);
 
     return (
         <List sx={{ marginTop: 2 }}>
@@ -19,7 +21,10 @@ const JobList = (props) => {
                         id={job.id} 
                         key={job.id} 
                         sx={{ p: 0, marginBottom: 2 }} 
-                        onClick={e => setId(e.target.offsetParent.id)}
+                        onClick={e => {
+                            setId(e.target.offsetParent.id);
+                            setSelected(e.target.offsetParent.id);
+                        }}
                     >
                         <JobItem job={job} id={id}/>
                     </ListItem>
