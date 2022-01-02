@@ -22,8 +22,8 @@ const JobList = (props) => {
                         key={job.id} 
                         sx={{ p: 0, marginBottom: 2 }} 
                         onClick={e => {
-                            setId(e.target.offsetParent.id);
                             setSelected(e.target.offsetParent.id);
+                            return setId(e.target.offsetParent.id);
                         }}
                     >
                         <JobItem job={job} id={id}/>
