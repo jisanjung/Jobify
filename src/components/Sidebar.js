@@ -1,4 +1,4 @@
-import { Button, Container, useMediaQuery } from '@mui/material'
+import { Button, CircularProgress, Container, useMediaQuery, Box } from '@mui/material'
 import React, { useState, useEffect } from 'react'
 import Input from './Input';
 import JobList from './jobs/JobList';
@@ -14,6 +14,7 @@ const Sidebar = () => {
     const [keywordError, setKeywordError] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const [noResults, setNoResults] = useState(false);
+    const [loading, setLoading] = useState(false);
     
     const setJobs = useStoreActions(actions => actions.setJobs);
     const jobList = useStoreState(state => state.jobList);
@@ -32,9 +33,11 @@ const Sidebar = () => {
         e.preventDefault();
         
         if (zipCode && keyword)
+            setLoading(true);
             fetch(`${baseURL}&where=${zipCode}&title_only=${keyword}`)
             .then(res => res.json())
             .then(data => {
+                setLoading(false);
                 if (data.results.length === 0) {
                     return setNoResults(true);
                 }
@@ -75,6 +78,11 @@ const Sidebar = () => {
                     Search
                 </Button>
             </form>
+            {loading ? (
+                <Box sx={{ display: "flex", justifyContent: "center", marginY: 3 }}>
+                    <CircularProgress/>
+                </Box>
+            ) : <></>}
             {!noResults ? (
                 <JobList jobList={jobList}/>
             ) : (
