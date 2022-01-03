@@ -24,8 +24,15 @@ const Main = () => {
     });
 
     useEffect(() => {
-      console.log(center)
+      setViewport({
+        latitude: center[0],
+        longitude: center[1],
+        width: "100vw",
+        height: "100%",
+        zoom: 10
+      });
     }, [center]);
+
     useEffect(() => {
       console.log(jobList)
     }, [jobList]);
@@ -45,8 +52,6 @@ const Main = () => {
               }}
               mapStyle="mapbox://styles/jsonjung/ckx7qkqd423gj14s6axbpff2p"
               height={lgMatches ? "100vh" : "50vh"}
-              latitude={center[0] ? center[0] : 40.241562}
-              longitude={center[1] ? center[1] : -75.283737}
             >
               {jobList.map(job => (
                 <Marker 
