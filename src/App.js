@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import './App.css';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useMediaQuery } from "@mui/material"; 
 import { StoreProvider, createStore } from "easy-peasy";
 import model from "./model"; 
 import Main from "./components/Main";
@@ -9,15 +8,6 @@ import Main from "./components/Main";
 function App() {
 
   const store = createStore(model);
-
-  // for react map component
-  const [viewport, setViewport] = useState({
-    latitude: 40.241562,
-    longitude: -75.283737,
-    width: "100vw",
-    height: "100%",
-    zoom: 10
-  });
 
   const theme = createTheme({
     palette: {

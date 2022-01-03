@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import ReactMapGL from "react-map-gl";
+import ReactMapGL, { Marker } from "react-map-gl";
 import Sidebar from "./Sidebar";
 import { Grid } from "@mui/material";
 import Header from "./Header";
 import { useMediaQuery } from "@mui/material"; 
 import { useStoreState } from "easy-peasy";
+import Location from './Location';
 
 const Main = () => {
 
@@ -29,15 +30,24 @@ const Main = () => {
           </Grid>
           <Grid item xs={12} md={8} lg={9} sx={{ position: "relative" }}>
             <Header/>
-            {/* <ReactMapGL 
+            <ReactMapGL 
             {...viewport}
             mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
             onViewportChange={(viewport) => setViewport(viewport)}
             mapStyle="mapbox://styles/jsonjung/ckx7qkqd423gj14s6axbpff2p"
             height={lgMatches ? "100vh" : "50vh"}>
-            </ReactMapGL> */}
-            <div style={{ width: "100%", height: "100vh", background: "#e3e3e3" }}>
-            </div>
+              {jobList.map(job => (
+                <Marker 
+                  key={job.id}
+                  latitude={job.latitude}
+                  longitude={job.longitude}
+                >
+                  <Location/>
+                </Marker>
+              ))}
+            </ReactMapGL>
+            {/* <div style={{ width: "100%", height: "100vh", background: "#e3e3e3" }}>
+            </div> */}
           </Grid>
         </Grid>
     )
