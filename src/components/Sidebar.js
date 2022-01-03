@@ -18,6 +18,7 @@ const Sidebar = () => {
     
     const setJobs = useStoreActions(actions => actions.setJobs);
     const jobList = useStoreState(state => state.jobList);
+    const setCenter = useStoreActions(actions => actions.setCenter);
 
     useEffect(() => {
         if (zipCodeError || keywordError) {
@@ -42,6 +43,7 @@ const Sidebar = () => {
                     return setNoResults(true);
                 }
                 setNoResults(false);
+                setCenter([data.results[0].latitude, data.results[0].longitude]);
                 return setJobs(data.results);
             });
     }

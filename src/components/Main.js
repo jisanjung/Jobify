@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactMapGL, { Marker } from "react-map-gl";
 import Sidebar from "./Sidebar";
 import { Grid } from "@mui/material";
@@ -10,6 +10,7 @@ import Location from './Location';
 const Main = () => {
 
     const jobList = useStoreState(state => state.jobList);
+    const center = useStoreState(state => state.center);
     
     const lgMatches = useMediaQuery("(min-width:900px)");
 
@@ -22,20 +23,31 @@ const Main = () => {
         zoom: 10
     });
 
+    useEffect(() => {
+      console.log(center)
+    }, [center]);
+    useEffect(() => {
+      console.log(jobList)
+    }, [jobList]);
+
     return (
         <Grid container>
-            {console.log(jobList)}
           <Grid item xs={12} md={4} lg={3}>
             <Sidebar/>
           </Grid>
           <Grid item xs={12} md={8} lg={9} sx={{ position: "relative" }}>
             <Header/>
             <ReactMapGL 
-            {...viewport}
-            mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-            onViewportChange={(viewport) => setViewport(viewport)}
-            mapStyle="mapbox://styles/jsonjung/ckx7qkqd423gj14s6axbpff2p"
-            height={lgMatches ? "100vh" : "50vh"}>
+              {...viewport}
+              mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+              onViewportChange={(viewport) => {
+                return setViewport(viewport)
+              }}
+              mapStyle="mapbox://styles/jsonjung/ckx7qkqd423gj14s6axbpff2p"
+              height={lgMatches ? "100vh" : "50vh"}
+              latitude={center[0] ? center[0] : 40.241562}
+              longitude={center[1] ? center[1] : -75.283737}
+            >
               {jobList.map(job => (
                 <Marker 
                   key={job.id}
