@@ -6,7 +6,8 @@ import { useStoreActions } from 'easy-peasy';
 const JobList = (props) => {
 
     const [id, setId] = useState(0);
-    const setSelected = useStoreActions(actions => actions.setSelected);
+    const setSelectedId = useStoreActions(actions => actions.setSelectedId);
+    const setSelectedJob = useStoreActions(actions => actions.setSelectedJob);
 
     return (
         <List sx={{ marginTop: 2 }}>
@@ -22,7 +23,8 @@ const JobList = (props) => {
                         key={job.id} 
                         sx={{ p: 0, marginBottom: 2 }} 
                         onClick={e => {
-                            setSelected(e.target.offsetParent.id);
+                            setSelectedId(e.target.offsetParent.id);
+                            setSelectedJob(job);
                             return setId(e.target.offsetParent.id);
                         }}
                     >

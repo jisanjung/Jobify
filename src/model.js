@@ -3,15 +3,19 @@ import { action } from "easy-peasy";
 const globalState = {
     // state
     jobList: [],
-    selectedJob: 0,
+    selectedId: 0,
+    selectedJob: null,
     center: [40.241562, -75.283737],
 
     // actions
     setJobs: action((state, newList) => {
         state.jobList = newList;
     }),
-    setSelected: action((state, id) => {
-        state.selectedJob = id;
+    setSelectedId: action((state, id) => {
+        state.selectedId = id;
+    }),
+    setSelectedJob: action((state, job) => {
+        state.selectedJob = job;
     }),
     setCenter: action((state, latlong) => {
         state.center = latlong;

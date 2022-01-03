@@ -11,6 +11,7 @@ const Main = () => {
 
     const jobList = useStoreState(state => state.jobList);
     const center = useStoreState(state => state.center);
+    const selectedJob = useStoreState(state => state.selectedJob);
     
     const lgMatches = useMediaQuery("(min-width:900px)");
 
@@ -36,6 +37,10 @@ const Main = () => {
     useEffect(() => {
       console.log(jobList)
     }, [jobList]);
+
+    useEffect(() => {
+      console.log(selectedJob)
+    }, [selectedJob]);
 
     return (
         <Grid container>
