@@ -5,13 +5,15 @@ import { Grid } from "@mui/material";
 import Header from "./Header";
 import { useMediaQuery } from "@mui/material"; 
 import { useStoreState } from "easy-peasy";
-import Location from './Location';
+import Location from './map/Location';
+import JobPopup from './map/JobPopup';
 
 const Main = () => {
 
     const jobList = useStoreState(state => state.jobList);
     const center = useStoreState(state => state.center);
     const selectedJob = useStoreState(state => state.selectedJob);
+    const hoveredJob = useStoreState(state => state.hoveredJob);
     
     const lgMatches = useMediaQuery("(min-width:900px)");
 
@@ -67,6 +69,12 @@ const Main = () => {
                   <Location/>
                 </Marker>
               ))}
+              {hoveredJob && !selectedJob ? (
+                <JobPopup job={hoveredJob}/>
+              ) : <></>}
+              {selectedJob ? (
+                <JobPopup job={selectedJob} full={true}/>
+              ) : <></>}
             </ReactMapGL>
             {/* <div style={{ width: "100%", height: "100vh", background: "#e3e3e3" }}>
             </div> */}

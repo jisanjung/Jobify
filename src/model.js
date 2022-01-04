@@ -5,6 +5,7 @@ const globalState = {
     jobList: [],
     selectedId: 0,
     selectedJob: null,
+    hoveredJob: null,
     center: [40.241562, -75.283737],
 
     // actions
@@ -19,6 +20,9 @@ const globalState = {
     }),
     setCenter: action((state, latlong) => {
         state.center = latlong;
+    }),
+    setHoveredJob: action((state, job) => {
+        state.hoveredJob = job;
     }),
 };
 

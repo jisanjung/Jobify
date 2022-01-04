@@ -2,7 +2,7 @@ import { Button, CircularProgress, Container, useMediaQuery, Box } from '@mui/ma
 import React, { useState, useEffect } from 'react'
 import Input from './Input';
 import JobList from './jobs/JobList';
-import NoResults from './NoResults';
+import NoResults from './jobs/NoResults';
 import { useStoreActions, useStoreState } from "easy-peasy";
  
 const Sidebar = () => {

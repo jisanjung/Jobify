@@ -1,7 +1,7 @@
 import { Typography } from '@mui/material';
 import { Box } from '@mui/system'
 import React from 'react';
-import searchHouse from "../assets/undraw_house_searching_re_stk8.svg";
+import searchHouse from "../../assets/undraw_house_searching_re_stk8.svg";
 
 const NoResults = React.memo((props) => {
 

@@ -8,6 +8,7 @@ const JobList = (props) => {
     const [id, setId] = useState(0);
     const setSelectedId = useStoreActions(actions => actions.setSelectedId);
     const setSelectedJob = useStoreActions(actions => actions.setSelectedJob);
+    const setHoveredJob = useStoreActions(actions => actions.setHoveredJob);
 
     return (
         <List sx={{ marginTop: 2 }}>
@@ -27,6 +28,8 @@ const JobList = (props) => {
                             setSelectedJob(job);
                             return setId(e.target.offsetParent.id);
                         }}
+                        onMouseEnter={() => setHoveredJob(job)}
+                        onMouseLeave={() => setHoveredJob(null)}
                     >
                         <JobItem job={job} id={id}/>
                     </ListItem>
