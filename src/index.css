@@ -19,3 +19,8 @@ code {
 .w-500px {
   width: 500px !important;
 } 
+
+/* mapbox popup */
+.mapboxgl-popup-content {
+  max-width: 300px;
+}
