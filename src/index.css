@@ -23,4 +23,5 @@ code {
 /* mapbox popup */
 .mapboxgl-popup-content {
   max-width: 300px;
+  padding: 1rem !important;
 }
