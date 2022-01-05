@@ -19,6 +19,8 @@ const Sidebar = () => {
     const setJobs = useStoreActions(actions => actions.setJobs);
     const jobList = useStoreState(state => state.jobList);
     const setCenter = useStoreActions(actions => actions.setCenter);
+    const setSelectedId = useStoreActions(actions => actions.setSelectedId);
+    const setSelectedJob = useStoreActions(actions => actions.setSelectedJob);
 
     useEffect(() => {
         if (zipCodeError || keywordError) {
@@ -39,6 +41,8 @@ const Sidebar = () => {
             .then(res => res.json())
             .then(data => {
                 setLoading(false);
+                setSelectedId(0);
+                setSelectedJob(null);
                 if (data.results.length === 0) {
                     return setNoResults(true);
                 }
