@@ -9,6 +9,7 @@ const JobList = (props) => {
     const setSelectedId = useStoreActions(actions => actions.setSelectedId);
     const setSelectedJob = useStoreActions(actions => actions.setSelectedJob);
     const setHoveredJob = useStoreActions(actions => actions.setHoveredJob);
+    const setCenter = useStoreActions(actions => actions.setCenter);
 
     return (
         <List sx={{ marginTop: 2 }}>
@@ -25,6 +26,7 @@ const JobList = (props) => {
                         sx={{ p: 0, marginBottom: 2 }} 
                         onClick={e => {
                             setSelectedJob(job);
+                            setCenter([job.latitude, job.longitude]);
                             return setSelectedId(e.target.offsetParent.id);
                         }}
                         onMouseEnter={() => setHoveredJob(job)}
