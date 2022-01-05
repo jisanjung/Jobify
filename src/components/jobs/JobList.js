@@ -1,11 +1,11 @@
 import { List, ListItem, Typography } from '@mui/material';
 import JobItem from "./JobItem";
-import React, { useState } from 'react';
-import { useStoreActions } from 'easy-peasy';
+import React from 'react';
+import { useStoreState, useStoreActions } from 'easy-peasy';
 
 const JobList = (props) => {
 
-    const [id, setId] = useState(0);
+    const selectedId = useStoreState(state => state.selectedId);
     const setSelectedId = useStoreActions(actions => actions.setSelectedId);
     const setSelectedJob = useStoreActions(actions => actions.setSelectedJob);
     const setHoveredJob = useStoreActions(actions => actions.setHoveredJob);
@@ -24,14 +24,13 @@ const JobList = (props) => {
                         key={job.id} 
                         sx={{ p: 0, marginBottom: 2 }} 
                         onClick={e => {
-                            setSelectedId(e.target.offsetParent.id);
                             setSelectedJob(job);
-                            return setId(e.target.offsetParent.id);
+                            return setSelectedId(e.target.offsetParent.id);
                         }}
                         onMouseEnter={() => setHoveredJob(job)}
                         onMouseLeave={() => setHoveredJob(null)}
                     >
-                        <JobItem job={job} id={id}/>
+                        <JobItem job={job} id={selectedId}/>
                     </ListItem>
                 )
             })}

@@ -1,15 +1,23 @@
 import { Link, Typography, Box } from '@mui/material';
+import { useStoreActions } from 'easy-peasy';
 import React, { useState } from 'react';
 import { Popup } from 'react-map-gl';
 
 const JobPopup = (props) => {
 
     const [expandText, setExpandText] = useState(false);
+    const setSelectedId = useStoreActions(actions => actions.setSelectedId);
+    const setSelectedJob = useStoreActions(actions => actions.setSelectedJob);
 
     return (
         <Popup 
             latitude={props.job.latitude} 
             longitude={props.job.longitude}
+            onClose={() => {
+                setSelectedId(0);
+                setSelectedJob(null);
+                return;
+            }}
         >
             <Typography variant='body1' component="h1" sx={{ fontWeight: 'bold' }}>
                 {props.job.title}
