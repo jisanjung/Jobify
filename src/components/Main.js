@@ -40,10 +40,6 @@ const Main = () => {
       console.log(jobList)
     }, [jobList]);
 
-    useEffect(() => {
-      console.log(selectedJob)
-    }, [selectedJob]);
-
     return (
         <Grid container>
           <Grid item xs={12} md={4} lg={3}>
@@ -66,7 +62,7 @@ const Main = () => {
                   latitude={job.latitude}
                   longitude={job.longitude}
                 >
-                  <Location/>
+                  <Location job={job}/>
                 </Marker>
               ))}
               {hoveredJob && !selectedJob ? (
