@@ -64,7 +64,7 @@ const Sidebar = () => {
             zIndex: "10",
             background: "#fff"
         }} style={{ paddingTop: "1rem", paddingBottom: "1rem", overflowY: "scroll" }}>
-            <form onSubmit={e => handleSearch(e)}>
+            <form onSubmit={e => handleSearch(e)} style={{ paddingTop: "1rem" }}>
                 <Input 
                     label="Zip Code" 
                     variant="standard" 
@@ -85,7 +85,7 @@ const Sidebar = () => {
                 </Button>
             </form>
             {loading ? (
-                <Box sx={{ display: "flex", justifyContent: "center", marginY: 3 }}>
+                <Box sx={{ display: "flex", justifyContent: "center", marginY: 5 }}>
                     <CircularProgress/>
                 </Box>
             ) : <></>}
