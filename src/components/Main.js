@@ -54,7 +54,7 @@ const Main = () => {
                 return setViewport(viewport)
               }}
               mapStyle="mapbox://styles/jsonjung/ckx7qkqd423gj14s6axbpff2p"
-              height={lgMatches ? "100vh" : "50vh"}
+              height={lgMatches ? "100vh" : "60vh"}
             >
               {jobList.map(job => (
                 <Marker 

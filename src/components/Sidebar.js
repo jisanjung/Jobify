@@ -58,7 +58,7 @@ const Sidebar = () => {
         } : {
             position: "absolute",
             bottom: 0,
-            top: "50%",
+            top: "60%",
             left: 0,
             right: 0,
             zIndex: "10",
