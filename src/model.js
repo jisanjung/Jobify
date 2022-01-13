@@ -6,7 +6,7 @@ const globalState = {
     selectedId: 0,
     selectedJob: null,
     hoveredJob: null,
-    center: [40.241562, -75.283737],
+    center: [34.0522, -118.2437], // default location is Los Angelos, CA. No reason, just a popular city
 
     // actions
     setJobs: action((state, newList) => {

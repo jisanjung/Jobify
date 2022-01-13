@@ -18,9 +18,10 @@ const Main = () => {
     const lgMatches = useMediaQuery("(min-width:900px)");
 
     // for react map component
+    // default location is Los Angelos, CA. No reason, just a popular city
     const [viewport, setViewport] = useState({
-        latitude: 40.241562,
-        longitude: -75.283737,
+        latitude: 34.0522,
+        longitude: -118.2437,
         width: "100vw",
         height: "100%",
         zoom: 10
