@@ -27,6 +27,7 @@
     <br />
     <a href="#about-the-project"><strong>Explore the docs »</strong></a>
     <br />
+    <br />
     <a href="#">View Demo</a>
   </p>
 </div>
