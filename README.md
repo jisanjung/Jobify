@@ -20,13 +20,12 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <h3 align="center">Jobify</h3>
+  <h1 align="center">Jobify</h1>
 
   <p align="center">
     Job search w/ a map! (US only)
     <br />
     <a href="#about-the-project"><strong>Explore the docs »</strong></a>
-    <br />
     <br />
     <a href="#">View Demo</a>
   </p>
@@ -122,7 +121,7 @@ Coming soon.
 <!-- CONTACT -->
 ## Contact
 
-Jason Jung - [jisan.jung@temple.edu](jisan.jung@temple.edu)
+Jason Jung - [jisan.jung@temple.edu](mailto:jisan.jung@temple.edu)
 
 LinkedIn: [https://www.linkedin.com/in/jisan-jung-33129b179/](https://www.linkedin.com/in/jisan-jung-33129b179/)
 
