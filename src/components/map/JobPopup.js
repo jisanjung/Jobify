@@ -16,7 +16,9 @@ const JobPopup = (props) => {
             onClose={() => {
                 setSelectedId(0);
                 setSelectedJob(null);
-                return;
+            }}
+            onClick={e => {
+                e.stopPropagation();
             }}
         >
             <Typography variant='body1' component="h1" sx={{ fontWeight: 'bold' }}>
