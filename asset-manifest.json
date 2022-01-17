@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/Jobify/static/css/main.f49d11b9.css",
-    "main.js": "/Jobify/static/js/main.90fddce8.js",
+    "main.js": "/Jobify/static/js/main.944cbce0.js",
     "static/js/787.b05e07c8.chunk.js": "/Jobify/static/js/787.b05e07c8.chunk.js",
     "static/media/undraw_house_searching_re_stk8.svg": "/Jobify/static/media/undraw_house_searching_re_stk8.d723edf07b3a4df9be9647ffbe504ad1.svg",
     "index.html": "/Jobify/index.html",
     "main.f49d11b9.css.map": "/Jobify/static/css/main.f49d11b9.css.map",
-    "main.90fddce8.js.map": "/Jobify/static/js/main.90fddce8.js.map",
+    "main.944cbce0.js.map": "/Jobify/static/js/main.944cbce0.js.map",
     "787.b05e07c8.chunk.js.map": "/Jobify/static/js/787.b05e07c8.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f49d11b9.css",
-    "static/js/main.90fddce8.js"
+    "static/js/main.944cbce0.js"
   ]
 }
