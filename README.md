@@ -28,7 +28,7 @@
     <a href="#about-the-project"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="#">View Demo</a>
+    <a href="https://jobifyus.netlify.app/">View Demo</a>
   </p>
 </div>
 
