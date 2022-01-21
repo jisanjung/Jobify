@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactMapGL, { Marker } from "react-map-gl";
-import Sidebar from "./Sidebar";
+import Sidebar from "./sidebar/Sidebar";
 import { Grid } from "@mui/material";
 import Header from "./Header";
 import { useMediaQuery } from "@mui/material"; 
