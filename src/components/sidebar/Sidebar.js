@@ -11,6 +11,7 @@ const Sidebar = () => {
     const [noResults, setNoResults] = useState(false);
     const [loading, setLoading] = useState(false);
     const [pageCount, setPageCount] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
     
     const jobList = useStoreState(state => state.jobList);
 
@@ -30,6 +31,7 @@ const Sidebar = () => {
                 setLoading={setLoading} 
                 setNoResults={setNoResults}
                 setPageCount={setPageCount}
+                currentPage={currentPage}
             />
             {loading ? (
                 <Box sx={{ display: "flex", justifyContent: "center", marginY: 5 }}>
@@ -42,7 +44,7 @@ const Sidebar = () => {
                 <NoResults text="No results"/>
             )}
             {jobList.length > 0 ? 
-            <Pagination count={pageCount} variant="outlined"/>
+            <Pagination count={pageCount} variant="outlined" onChange={(e, val) => setCurrentPage(val)}/>
              : <></>}
         </Container>
     )
