@@ -1,4 +1,4 @@
-import { CircularProgress, Container, useMediaQuery, Box } from '@mui/material'
+import { CircularProgress, Container, useMediaQuery, Box, Pagination } from '@mui/material'
 import React, { useState } from 'react'
 import JobList from '../jobs/JobList';
 import NoResults from '../jobs/NoResults';
@@ -10,6 +10,7 @@ const Sidebar = () => {
     const lgMatches = useMediaQuery("(min-width:900px)");
     const [noResults, setNoResults] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [pageCount, setPageCount] = useState(0);
     
     const jobList = useStoreState(state => state.jobList);
 
@@ -39,6 +40,7 @@ const Sidebar = () => {
             ) : (
                 <NoResults text="No results"/>
             )}
+            {jobList.length > 0 ? <Pagination count={10} variant="outlined"/> : <></>}
         </Container>
     )
 }
