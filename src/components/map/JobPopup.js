@@ -1,11 +1,10 @@
 import { Link, Typography, Box } from '@mui/material';
 import { useStoreActions } from 'easy-peasy';
-import React, { useState } from 'react';
+import React from 'react';
 import { Popup } from 'react-map-gl';
 
 const JobPopup = (props) => {
 
-    const [expandText, setExpandText] = useState(false);
     const setSelectedId = useStoreActions(actions => actions.setSelectedId);
     const setSelectedJob = useStoreActions(actions => actions.setSelectedJob);
 
@@ -32,12 +31,9 @@ const JobPopup = (props) => {
             </Box>
             {props.full ? (
             <Box sx={{ marginTop: 2 }}>
-                <Typography variant='body2' sx={{ height: expandText ? "auto" : "100px", overflowY: "hidden" }}>
+                <Typography variant='body2' sx={{ height: "100px", overflowY: "hidden" }}>
                     {props.job.description}
                 </Typography>
-                <button style={{ background: "transparent", border: 0, padding: 0, color: "#757575", cursor: "pointer" }} onClick={() => setExpandText(!expandText)}>
-                    {expandText ? "less" : "more..."}
-                </button>
                 <Link href={props.job.redirect_url} target="_blank" rel="noopener noreferrer"
                 sx={{ display: "block", marginTop: 2 }}
                 >
