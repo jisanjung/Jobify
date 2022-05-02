@@ -44,7 +44,7 @@ const Sidebar = () => {
                 <NoResults text="No results"/>
             )}
             {jobList.length > 0 ? 
-            <Pagination count={pageCount} variant="outlined" onChange={(e, val) => setCurrentPage(val)}/>
+            <Pagination count={pageCount} variant="outlined" color="primary" disabled={loading} onChange={(e, val) => setCurrentPage(val)}/>
              : <></>}
         </Container>
     )
