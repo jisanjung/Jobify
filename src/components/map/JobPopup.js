@@ -1,4 +1,4 @@
-import { Link, Typography, Box } from '@mui/material';
+import { Link, Typography, Box, useMediaQuery } from '@mui/material';
 import { useStoreActions } from 'easy-peasy';
 import React from 'react';
 import { Popup } from 'react-map-gl';
@@ -7,6 +7,8 @@ const JobPopup = (props) => {
 
     const setSelectedId = useStoreActions(actions => actions.setSelectedId);
     const setSelectedJob = useStoreActions(actions => actions.setSelectedJob);
+
+    const lgMatches = useMediaQuery("(min-width:900px)");
 
     return (
         <Popup 
@@ -31,9 +33,9 @@ const JobPopup = (props) => {
             </Box>
             {props.full ? (
             <Box sx={{ marginTop: 2 }}>
-                <Typography variant='body2' sx={{ height: "100px", overflowY: "hidden" }}>
+                {lgMatches ? <Typography variant='body2' sx={{ height: "100px", overflowY: "hidden" }}>
                     {props.job.description}
-                </Typography>
+                </Typography> : <></>}
                 <Link href={props.job.redirect_url} target="_blank" rel="noopener noreferrer"
                 sx={{ display: "block", marginTop: 2 }}
                 >
