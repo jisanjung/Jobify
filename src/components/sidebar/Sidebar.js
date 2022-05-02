@@ -29,6 +29,7 @@ const Sidebar = () => {
             <Form 
                 setLoading={setLoading} 
                 setNoResults={setNoResults}
+                setPageCount={setPageCount}
             />
             {loading ? (
                 <Box sx={{ display: "flex", justifyContent: "center", marginY: 5 }}>
@@ -40,7 +41,9 @@ const Sidebar = () => {
             ) : (
                 <NoResults text="No results"/>
             )}
-            {jobList.length > 0 ? <Pagination count={10} variant="outlined"/> : <></>}
+            {jobList.length > 0 ? 
+            <Pagination count={pageCount} variant="outlined"/>
+             : <></>}
         </Container>
     )
 }

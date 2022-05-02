@@ -34,6 +34,7 @@ const Form = (props) => {
             fetch(`${baseURL}&where=${zipCode}&title_only=${keyword}`)
             .then(res => res.json())
             .then(data => {
+                props.setPageCount(Math.ceil(data.count / 50));
                 props.setLoading(false);
                 setSelectedId(0);
                 setSelectedJob(null);
