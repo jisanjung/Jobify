@@ -2,7 +2,7 @@ import { CircularProgress, useMediaQuery, Box, Pagination } from '@mui/material'
 import React, { useState, useRef } from 'react'
 import JobList from '../jobs/JobList';
 import NoResults from '../jobs/NoResults';
-import { useStoreState } from "easy-peasy";
+import { useStoreActions, useStoreState } from "easy-peasy";
 import Form from './Form';
  
 const Sidebar = () => {
@@ -12,9 +12,26 @@ const Sidebar = () => {
     const [loading, setLoading] = useState(false);
     const [pageCount, setPageCount] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
+    const [currentURL, setCurrentURL] = useState("");
     const myRef = useRef(null);
     
     const jobList = useStoreState(state => state.jobList);
+    const setJobs = useStoreActions(actions => actions.setJobs);
+
+     // refetch job list based on current page
+    const refetch = (currentPage, url) => {
+        const urlFirstHalf = url.substring(0, url.indexOf("?") - 1);
+        const urlSecondHalf = url.substring(urlFirstHalf.length + 1);
+        const newURL = urlFirstHalf + currentPage + urlSecondHalf;
+
+        setLoading(true);
+        fetch(newURL)
+        .then(res => res.json())
+        .then(data => {
+            setLoading(false);
+            return setJobs(data.results);
+        });
+    }
 
     return (
         <div ref={myRef} style={lgMatches ? {
@@ -39,6 +56,7 @@ const Sidebar = () => {
                 setLoading={setLoading} 
                 setNoResults={setNoResults}
                 setPageCount={setPageCount}
+                setCurrentURL={setCurrentURL}
                 currentPage={currentPage}
             />
             {loading ? (
@@ -55,6 +73,7 @@ const Sidebar = () => {
             <Pagination style={{paddingBottom: lgMatches ? "2rem" : "1rem"}} count={pageCount} variant="outlined" color="primary" disabled={loading} onChange={(e, val) => {
                 myRef.current.scrollTop = 0;
                 setCurrentPage(val);
+                if (val !== currentPage) refetch(val, currentURL);
             }}/>
              : <></>}
         </div>

@@ -16,6 +16,7 @@ const Form = (props) => {
     const setSelectedId = useStoreActions(actions => actions.setSelectedId);
     const setSelectedJob = useStoreActions(actions => actions.setSelectedJob);
 
+
     useEffect(() => {
         if (zipCodeError || keywordError) {
             setDisabled(true);
@@ -31,6 +32,7 @@ const Form = (props) => {
         
         if (zipCode && keyword)
             props.setLoading(true);
+            props.setCurrentURL(`${baseURL}&where=${zipCode}&title_only=${keyword}`);
             fetch(`${baseURL}&where=${zipCode}&title_only=${keyword}`)
             .then(res => res.json())
             .then(data => {
@@ -46,19 +48,6 @@ const Form = (props) => {
                 return setJobs(data.results);
             });
     }
-    // refetch job list based on current page
-    // useEffect(() => {
-    //     let baseURL = `https://api.adzuna.com/v1/api/jobs/us/search/${props.currentPage}?results_per_page=50&app_id=${process.env.REACT_APP_ADZUNA_APPID}&app_key=${process.env.REACT_APP_ADZUNA_KEY}`;
-    //     if (zipCode && keyword) {
-    //         props.setLoading(true);
-    //         fetch(`${baseURL}&where=${zipCode}&title_only=${keyword}`)
-    //         .then(res => res.json())
-    //         .then(data => {
-    //             props.setLoading(false);
-    //             return setJobs(data.results);
-    //         });
-    //     }
-    // }, [props.currentPage]);
 
   return (
     <form onSubmit={e => handleSearch(e)} style={{ paddingTop: "1rem" }}>
