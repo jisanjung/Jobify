@@ -47,21 +47,18 @@ const Form = (props) => {
             });
     }
     // refetch job list based on current page
-    const refetch = currentPage => {
-        let baseURL = `https://api.adzuna.com/v1/api/jobs/us/search/${currentPage}?results_per_page=50&app_id=${process.env.REACT_APP_ADZUNA_APPID}&app_key=${process.env.REACT_APP_ADZUNA_KEY}`;
-        if (zipCode && keyword) {
-            props.setLoading(true);
-            fetch(`${baseURL}&where=${zipCode}&title_only=${keyword}`)
-            .then(res => res.json())
-            .then(data => {
-                props.setLoading(false);
-                return setJobs(data.results);
-            });
-        }
-    }
-    useEffect(() => {
-        refetch(props.currentPage);
-    }, [props.currentPage]);
+    // useEffect(() => {
+    //     let baseURL = `https://api.adzuna.com/v1/api/jobs/us/search/${props.currentPage}?results_per_page=50&app_id=${process.env.REACT_APP_ADZUNA_APPID}&app_key=${process.env.REACT_APP_ADZUNA_KEY}`;
+    //     if (zipCode && keyword) {
+    //         props.setLoading(true);
+    //         fetch(`${baseURL}&where=${zipCode}&title_only=${keyword}`)
+    //         .then(res => res.json())
+    //         .then(data => {
+    //             props.setLoading(false);
+    //             return setJobs(data.results);
+    //         });
+    //     }
+    // }, [props.currentPage]);
 
   return (
     <form onSubmit={e => handleSearch(e)} style={{ paddingTop: "1rem" }}>
