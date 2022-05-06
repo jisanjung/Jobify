@@ -60,7 +60,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-![Jobify Project Screenshot](src/assets/screenshot.PNG)
+![Jobify Project Screenshot](src/assets/jobify.PNG)
 
 There are many job searching applications, however very few show exact locations and location details. Jobify is intended to assist with the job searching process by looking exactly where a job would be located by simply using your zip code and a keyword.
 
