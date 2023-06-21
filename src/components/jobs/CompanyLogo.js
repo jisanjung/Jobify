@@ -4,8 +4,9 @@ import logoReplacement from "../../assets/company.png";
 
 const CompanyLogo = (props) => {
     
-    let companyDomain = props.company.toLowerCase();
-    companyDomain = companyDomain.replace(/\s+/g, ''); // remove spaces
+    let companyDomain = props.company?.toLowerCase();
+    companyDomain = companyDomain?.replace(/\s+/g, ''); // remove spaces
+    companyDomain = companyDomain?.replace(/[^a-zA-Z0-9 ]/g, ''); // remove special characters
     companyDomain = `${companyDomain}.com`;
     let URL = `https://logo.clearbit.com/${companyDomain}`;
 
