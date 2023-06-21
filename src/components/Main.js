@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ReactMapGL, { Marker } from "react-map-gl";
 import Sidebar from "./sidebar/Sidebar";
-import { Grid } from "@mui/material";
+import { Box } from "@mui/material";
 import Header from "./Header";
 import { useMediaQuery } from "@mui/material"; 
 import { useStoreState } from "easy-peasy";
@@ -42,11 +42,11 @@ const Main = () => {
     }, [jobList]);
 
     return (
-        <Grid container>
-          <Grid item xs={12} md={4} lg={3}>
+        <Box sx={{ display: "flex", flexDirection: lgMatches ? "row" : "column" }}>
+          <Box>
             <Sidebar/>
-          </Grid>
-          <Grid item xs={12} md={8} lg={9} sx={{ position: "relative" }}>
+          </Box>
+          <Box sx={{ position: "relative" }}>
             <Header/>
             <ReactMapGL 
               {...viewport}
@@ -75,8 +75,8 @@ const Main = () => {
             </ReactMapGL>
             {/* <div style={{ width: "100%", height: "100vh", background: "#e3e3e3" }}>
             </div> */}
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
     )
 }
 

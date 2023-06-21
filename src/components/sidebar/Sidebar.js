@@ -39,7 +39,8 @@ const Sidebar = () => {
             overflowY: "scroll",
             paddingRight: "1.5rem",
             paddingLeft: "1.5rem",
-            paddingTop: "1rem"
+            paddingTop: "1rem",
+            width: "440px"
         } : {
             position: "absolute",
             bottom: 0,
