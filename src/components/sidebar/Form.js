@@ -26,7 +26,7 @@ const Form = (props) => {
     }, [zipCodeError, keywordError]);
 
     const handleSearch = e => {
-        let baseURL = `https://api.adzuna.com/v1/api/jobs/us/search/1?results_per_page=50&app_id=${process.env.REACT_APP_ADZUNA_APPID}&app_key=${process.env.REACT_APP_ADZUNA_KEY}`;
+        let baseURL = `https://api.adzuna.com/v1/api/jobs/us/search/1?results_per_page=30&app_id=${process.env.REACT_APP_ADZUNA_APPID}&app_key=${process.env.REACT_APP_ADZUNA_KEY}`;
 
         e.preventDefault();
         
