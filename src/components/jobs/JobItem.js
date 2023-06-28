@@ -21,6 +21,12 @@ const JobItem = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.id]);
 
+    const formatCurrency = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        maximumFractionDigits: 0,
+      });
+
     return (
         <Card 
             id={props.job.id}
@@ -36,11 +42,12 @@ const JobItem = (props) => {
                     {dayjs(formatDate).fromNow()}
                 </Typography>
             </Box>
+            <div>{formatCurrency.format(props.job?.salary_max)}</div>
             <Box>
                 <Typography variant="body1" component="h1" sx={{ fontWeight: 'bold', textDecoration: hovered ? "underline" : "none", cursor: "pointer" }}>
                     {props.job.title}
                 </Typography>
-                <Typography variant='body1' sx={{ color: "#757575" }}>
+                <Typography variant='body1'>
                     {props.job.company.display_name}
                 </Typography>
                 <Typography variant='body1' sx={{ color: "#757575" }}>
