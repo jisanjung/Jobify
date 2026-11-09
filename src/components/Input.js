@@ -1,36 +1,35 @@
-import { TextField } from '@mui/material';
-import React, { useState } from 'react';
+import { TextField } from "@mui/material";
+import React, { useState } from "react";
 
-const Input = (props) => {
+const Input = ({ label, regex, setInput, setError, errorText, sx, size, placeholder, InputProps, inputProps, name }) => {
+    const [error, setLocalError] = useState(false);
 
-    const [error, setError] = useState(false);
-
-    const validate = input => {
-        if (!props.regex.test(input) || !input) {
-            setError(true);
-            props.setError(true);
-        } else {
-            setError(false);
-            props.setError(false);
-        }
-    }
+    const validate = (value) => {
+        const invalid = !value || !regex.test(value);
+        setLocalError(invalid);
+        setError(invalid);
+    };
 
     return (
-        <TextField 
-            label={props.label} 
-            variant={props.variant} 
-            sx={props.sx} 
-            regex={props.regex} 
-            error={error} 
-            helperText={error ? `Enter valid ${props.label.toLowerCase()}` : ""}
-            onBlur={e => validate(e.target.value)}
-            onChange={e => {
-                props.setInput(e.target.value);
-                validate(e.target.value);
+        <TextField
+            label={label}
+            name={name}
+            sx={sx}
+            size={size}
+            placeholder={placeholder}
+            InputProps={InputProps}
+            inputProps={inputProps}
+            error={error}
+            helperText={error ? errorText || `Enter a valid ${label.toLowerCase()}` : " "}
+            onBlur={(e) => validate(e.target.value.trim())}
+            onChange={(e) => {
+                setInput(e.target.value.trim());
+                if (error) validate(e.target.value.trim());
             }}
+            fullWidth
             required
         />
-    )
-}
+    );
+};
 
-export default Input
+export default Input;

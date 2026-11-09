@@ -1,84 +1,216 @@
-import { CircularProgress, useMediaQuery, Box, Pagination } from '@mui/material'
-import React, { useState, useRef } from 'react'
-import JobList from '../jobs/JobList';
-import NoResults from '../jobs/NoResults';
+import { Alert, Box, Card, Divider, Fade, Pagination, Skeleton, Stack, Typography, useMediaQuery } from "@mui/material";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import { useStoreActions, useStoreState } from "easy-peasy";
-import Form from './Form';
- 
+import Header from "../Header";
+import Form from "./Form";
+import JobList from "../jobs/JobList";
+import JobDetails from "../jobs/JobDetails";
+import NoResults from "../jobs/NoResults";
+import useJobSelection from "../../hooks/useJobSelection";
+
+const RESULTS_PER_PAGE = 30;
+
+const buildUrl = (page, { zipCode, keyword }) =>
+    `https://api.adzuna.com/v1/api/jobs/us/search/${page}` +
+    `?results_per_page=${RESULTS_PER_PAGE}` +
+    `&app_id=${process.env.REACT_APP_ADZUNA_APPID}` +
+    `&app_key=${process.env.REACT_APP_ADZUNA_KEY}` +
+    `&where=${encodeURIComponent(zipCode)}` +
+    `&title_only=${encodeURIComponent(keyword)}`;
+
+const LoadingCards = () => (
+    <Stack spacing={1.5}>
+        {[0, 1, 2, 3].map((i) => (
+            <Card key={i} sx={{ p: 2 }}>
+                <Stack direction="row" spacing={1.75}>
+                    <Skeleton variant="rectangular" width={44} height={44} sx={{ borderRadius: 2, flexShrink: 0 }} />
+                    <Box sx={{ flex: 1 }}>
+                        <Skeleton width="80%" height={22} />
+                        <Skeleton width="45%" />
+                        <Skeleton width="60%" />
+                    </Box>
+                </Stack>
+            </Card>
+        ))}
+    </Stack>
+);
+
 const Sidebar = () => {
+    const isDesktop = useMediaQuery((theme) => theme.breakpoints.up("md"));
 
-    const lgMatches = useMediaQuery("(min-width:900px)");
-    const [noResults, setNoResults] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [pageCount, setPageCount] = useState(0);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [currentURL, setCurrentURL] = useState("");
-    const myRef = useRef(null);
-    
-    const jobList = useStoreState(state => state.jobList);
-    const setJobs = useStoreActions(actions => actions.setJobs);
+    const [status, setStatus] = useState("idle"); // idle | loading | success | error
+    const [errorMessage, setErrorMessage] = useState("");
+    const [params, setParams] = useState(null);
+    const [page, setPage] = useState(1);
 
-     // refetch job list based on current page
-    const refetch = (currentPage, url) => {
-        const urlFirstHalf = url.substring(0, url.indexOf("?") - 1);
-        const urlSecondHalf = url.substring(urlFirstHalf.length + 1);
-        const newURL = urlFirstHalf + currentPage + urlSecondHalf;
+    const rootRef = useRef(null);
+    const listRef = useRef(null);
+    const savedScroll = useRef(0);
 
-        setLoading(true);
-        fetch(newURL)
-        .then(res => res.json())
-        .then(data => {
-            setLoading(false);
-            return setJobs(data.results);
-        });
-    }
+    const jobList = useStoreState((state) => state.jobList);
+    const searchMeta = useStoreState((state) => state.searchMeta);
+    const selectedJob = useStoreState((state) => state.selectedJob);
+    const detailsOpen = useStoreState((state) => state.detailsOpen);
+    const setJobs = useStoreActions((actions) => actions.setJobs);
+    const setCenter = useStoreActions((actions) => actions.setCenter);
+    const setSearchMeta = useStoreActions((actions) => actions.setSearchMeta);
+    const { closeDetails, clearSelection } = useJobSelection();
+    const showDetails = Boolean(selectedJob && detailsOpen);
+
+    const scrollEl = () => (isDesktop ? listRef.current : rootRef.current);
+
+    const fetchJobs = (nextPage, nextParams) => {
+        setStatus("loading");
+        clearSelection();
+        fetch(buildUrl(nextPage, nextParams))
+            .then((res) => {
+                if (!res.ok) throw new Error(`Request failed (${res.status})`);
+                return res.json();
+            })
+            .then((data) => {
+                const results = data.results || [];
+                setJobs(results);
+                setSearchMeta({ ...nextParams, count: data.count || 0 });
+                if (results.length > 0) setCenter([results[0].latitude, results[0].longitude]);
+                setStatus("success");
+            })
+            .catch((err) => {
+                setErrorMessage(err.message || "Something went wrong");
+                setStatus("error");
+            });
+    };
+
+    const handleSearch = (nextParams) => {
+        setParams(nextParams);
+        setPage(1);
+        fetchJobs(1, nextParams);
+    };
+
+    const handlePageChange = (_, value) => {
+        if (value === page) return;
+        setPage(value);
+        const el = scrollEl();
+        if (el) el.scrollTop = 0;
+        fetchJobs(value, params);
+    };
+
+    // Remember list scroll position when opening a job, restore it on "back"
+    const prevShowDetails = useRef(showDetails);
+    useLayoutEffect(() => {
+        const el = scrollEl();
+        if (!el) return;
+        if (showDetails) {
+            el.scrollTop = 0; // opening (or switching) a job: start details at the top
+        } else if (prevShowDetails.current) {
+            el.scrollTop = savedScroll.current; // back to the list where the user left it
+        }
+        prevShowDetails.current = showDetails;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [showDetails, selectedJob]);
+
+    // Capture scroll position continuously while the list is shown
+    const handleScroll = (e) => {
+        if (!showDetails) savedScroll.current = e.currentTarget.scrollTop;
+    };
+
+    const pageCount = Math.min(Math.ceil((searchMeta?.count || 0) / RESULTS_PER_PAGE), 100);
+
+    const renderContent = () => {
+        if (status === "loading") return <LoadingCards />;
+        if (status === "error")
+            return (
+                <Alert severity="error" sx={{ mt: 1 }}>
+                    We couldn’t load jobs right now. {errorMessage}. Please try again.
+                </Alert>
+            );
+        if (status === "idle")
+            return (
+                <NoResults
+                    title="Search for jobs near you"
+                    subtitle="Enter a job title and a zip code to see openings on the map."
+                />
+            );
+        if (jobList.length === 0)
+            return <NoResults title="No jobs found" subtitle="Try a different keyword or a nearby zip code." />;
+
+        if (showDetails)
+            return (
+                <Fade in key={selectedJob.id}>
+                    <Box sx={{ height: "100%" }}>
+                        <JobDetails job={selectedJob} onBack={closeDetails} />
+                    </Box>
+                </Fade>
+            );
+
+        return (
+            <Fade in>
+                <Box>
+                    <Stack direction="row" justifyContent="space-between" alignItems="baseline" sx={{ mb: 1.5 }}>
+                        <Typography variant="subtitle2" component="h2">
+                            {searchMeta.count.toLocaleString()} jobs
+                        </Typography>
+                        {pageCount > 1 && (
+                            <Typography variant="caption" color="text.secondary">
+                                Page {page} of {pageCount}
+                            </Typography>
+                        )}
+                    </Stack>
+                    <JobList jobList={jobList} />
+                    {pageCount > 1 && (
+                        <Stack alignItems="center" sx={{ py: 3 }}>
+                            <Pagination
+                                count={pageCount}
+                                page={page}
+                                shape="rounded"
+                                color="primary"
+                                size={isDesktop ? "medium" : "small"}
+                                onChange={handlePageChange}
+                            />
+                        </Stack>
+                    )}
+                </Box>
+            </Fade>
+        );
+    };
 
     return (
-        <div ref={myRef} style={lgMatches ? {
-            height: "100vh", 
-            overflowY: "scroll",
-            paddingRight: "1.5rem",
-            paddingLeft: "1.5rem",
-            paddingTop: "1rem",
-            width: "440px"
-        } : {
-            position: "absolute",
-            bottom: 0,
-            top: "60%",
-            left: 0,
-            right: 0,
-            zIndex: "10",
-            background: "#fff", 
-            overflowY: "scroll",
-            paddingRight: "1rem",
-            paddingLeft: "1rem"
-        }}>
-            <Form 
-                setLoading={setLoading} 
-                setNoResults={setNoResults}
-                setPageCount={setPageCount}
-                setCurrentURL={setCurrentURL}
-                currentPage={currentPage}
-            />
-            {loading ? (
-                <Box sx={{ display: "flex", justifyContent: "center", marginY: 5 }}>
-                    <CircularProgress/>
+        <Box
+            ref={rootRef}
+            onScroll={isDesktop ? undefined : handleScroll}
+            sx={{
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                bgcolor: "background.default",
+                overflowY: { xs: "auto", md: "hidden" },
+            }}
+        >
+            <Box sx={{ px: { xs: 2, md: 3 }, pt: { xs: 1.5, md: 3 }, pb: 1, bgcolor: "background.paper", flexShrink: 0 }}>
+                {!isDesktop && (
+                    <Box sx={{ width: 36, height: 4, borderRadius: 2, bgcolor: "divider", mx: "auto", mb: 1.5 }} />
+                )}
+                <Header />
+                <Box sx={{ mt: 2.5 }}>
+                    <Form onSearch={handleSearch} loading={status === "loading"} />
                 </Box>
-            ) : <></>}
-            {!noResults ? (
-                <JobList jobList={jobList}/>
-            ) : (
-                <NoResults text="No results"/>
-            )}
-            {jobList.length > 0 ? 
-            <Pagination style={{paddingBottom: lgMatches ? "2rem" : "1rem"}} count={pageCount} variant="outlined" color="primary" disabled={loading} onChange={(e, val) => {
-                myRef.current.scrollTop = 0;
-                setCurrentPage(val);
-                if (val !== currentPage) refetch(val, currentURL);
-            }}/>
-             : <></>}
-        </div>
-    )
-}
+                <Box sx={{ pb: 1 }} />
+            </Box>
+            <Divider />
+            <Box
+                ref={listRef}
+                onScroll={isDesktop ? handleScroll : undefined}
+                sx={{
+                    flex: 1,
+                    overflowY: { xs: "visible", md: "auto" },
+                    px: { xs: 2, md: 3 },
+                    pt: 2,
+                    pb: showDetails ? 0 : 2,
+                }}
+            >
+                {renderContent()}
+            </Box>
+        </Box>
+    );
+};
 
-export default Sidebar
+export default Sidebar;

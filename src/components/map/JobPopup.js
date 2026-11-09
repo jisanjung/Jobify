@@ -1,36 +1,35 @@
-import { Typography, Box } from '@mui/material';
-import { useStoreActions } from 'easy-peasy';
-import React from 'react';
-import { Popup } from 'react-map-gl';
+import { Box, Typography } from "@mui/material";
+import React from "react";
+import { Popup } from "react-map-gl";
+import SalaryBadge from "../jobs/SalaryBadge";
+import { PIN_SIZE } from "./Location";
 
-const JobPopup = (props) => {
-
-    const setSelectedId = useStoreActions(actions => actions.setSelectedId);
-    const setSelectedJob = useStoreActions(actions => actions.setSelectedJob);
-
+// Lightweight label shown above a hovered or selected pin. Full details live in the side panel.
+const JobPopup = ({ job }) => {
     return (
-        <Popup 
-            latitude={props.job.latitude} 
-            longitude={props.job.longitude}
-            onClose={() => {
-                setSelectedId(0);
-                setSelectedJob(null);
-                return;
-            }}
+        <Popup
+            latitude={job.latitude}
+            longitude={job.longitude}
+            anchor="bottom"
+            offsetTop={-PIN_SIZE * 1.3}
+            closeButton={false}
+            closeOnClick={false}
         >
-            <Typography variant='body1' component="h1" sx={{ fontWeight: 'bold' }}>
-                {props.job.title}
-            </Typography>
-            <Box>
-                <Typography variant='body2' component="h3" sx={{ color: "#757575" }}>
-                    {props.job.company.display_name}
+            <Box sx={{ minWidth: 180 }}>
+                <Typography variant="subtitle2" component="p" sx={{ lineHeight: 1.3 }}>
+                    {job.title}
                 </Typography>
-                <Typography variant='body2' component="h3" sx={{ color: "#757575" }}>
-                    {props.job.location.display_name}
+                <Typography variant="caption" color="text.secondary" component="p" sx={{ mt: 0.25 }}>
+                    {job.company?.display_name}
                 </Typography>
+                {job.salary_max ? (
+                    <Box sx={{ mt: 1 }}>
+                        <SalaryBadge salary={job.salary_max} />
+                    </Box>
+                ) : null}
             </Box>
         </Popup>
-    )
-}
+    );
+};
 
-export default JobPopup
+export default JobPopup;

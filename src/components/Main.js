@@ -1,83 +1,129 @@
-import React, { useState, useEffect } from 'react';
-import ReactMapGL, { Marker } from "react-map-gl";
-import Sidebar from "./sidebar/Sidebar";
-import { Box } from "@mui/material";
-import Header from "./Header";
-import { useMediaQuery } from "@mui/material"; 
+import React, { useState, useEffect } from "react";
+import ReactMapGL, { Marker, FlyToInterpolator } from "react-map-gl";
+import { Box, Paper, Typography } from "@mui/material";
 import { useStoreState } from "easy-peasy";
-import Location from './map/Location';
-import JobPopup from './map/JobPopup';
+import Sidebar from "./sidebar/Sidebar";
+import Location, { PIN_SIZE } from "./map/Location";
+import JobPopup from "./map/JobPopup";
 
 const Main = () => {
+    const jobList = useStoreState((state) => state.jobList);
+    const center = useStoreState((state) => state.center);
+    const selectedJob = useStoreState((state) => state.selectedJob);
+    const hoveredJob = useStoreState((state) => state.hoveredJob);
+    const searchMeta = useStoreState((state) => state.searchMeta);
 
-    const jobList = useStoreState(state => state.jobList);
-    const center = useStoreState(state => state.center);
-    const selectedJob = useStoreState(state => state.selectedJob);
-    const hoveredJob = useStoreState(state => state.hoveredJob);
-    
-    const lgMatches = useMediaQuery("(min-width:900px)");
-
-    // for react map component
-    // default location is Los Angelos, CA. No reason, just a popular city
     const [viewport, setViewport] = useState({
-        latitude: 34.0522,
-        longitude: -118.2437,
-        width: "100vw",
-        height: "100%",
-        zoom: 10
+        latitude: center[0],
+        longitude: center[1],
+        zoom: 10,
     });
 
     useEffect(() => {
-      setViewport({
-        latitude: center[0],
-        longitude: center[1],
-        width: "100vw",
-        height: "100%",
-        zoom: 10
-      });
+        setViewport((v) => ({
+            ...v,
+            latitude: center[0],
+            longitude: center[1],
+            zoom: Math.max(v.zoom, 10),
+            transitionDuration: 600,
+            transitionInterpolator: new FlyToInterpolator(),
+        }));
     }, [center]);
 
-    useEffect(() => {
-      console.log(jobList)
-    }, [jobList]);
+    const popupJob = hoveredJob || selectedJob;
 
     return (
-        <Box sx={{ display: "flex", flexDirection: lgMatches ? "row" : "column" }}>
-          <Box>
-            <Sidebar/>
-          </Box>
-          <Box sx={{ position: "relative" }}>
-            <Header/>
-            <ReactMapGL 
-              {...viewport}
-              mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-              onViewportChange={(viewport) => {
-                return setViewport(viewport)
-              }}
-              mapStyle="mapbox://styles/jsonjung/ckx7qkqd423gj14s6axbpff2p"
-              height={lgMatches ? "100vh" : "60vh"}
+        <Box
+            sx={{
+                display: "flex",
+                flexDirection: { xs: "column", md: "row" },
+                height: "100vh",
+                bgcolor: "background.default",
+            }}
+        >
+            <Box
+                component="aside"
+                sx={{
+                    order: { xs: 1, md: 0 },
+                    width: { xs: "100%", md: 420 },
+                    flexShrink: 0,
+                    flex: { xs: 1, md: "none" },
+                    minHeight: 0,
+                    borderRight: { md: 1 },
+                    borderColor: { md: "divider" },
+                    borderTopLeftRadius: { xs: 16, md: 0 },
+                    borderTopRightRadius: { xs: 16, md: 0 },
+                    mt: { xs: -2, md: 0 },
+                    overflow: "hidden",
+                    position: "relative",
+                    zIndex: 2,
+                    boxShadow: { xs: "0 -4px 16px rgba(15, 23, 42, 0.08)", md: "none" },
+                }}
             >
-              {jobList.map(job => (
-                <Marker 
-                  key={job.id}
-                  latitude={job.latitude}
-                  longitude={job.longitude}
-                >
-                  <Location job={job}/>
-                </Marker>
-              ))}
-              {hoveredJob && !selectedJob ? (
-                <JobPopup job={hoveredJob}/>
-              ) : <></>}
-              {selectedJob ? (
-                <JobPopup job={selectedJob} full={true}/>
-              ) : <></>}
-            </ReactMapGL>
-            {/* <div style={{ width: "100%", height: "100vh", background: "#e3e3e3" }}>
-            </div> */}
-          </Box>
-        </Box>
-    )
-}
+                <Sidebar />
+            </Box>
 
-export default Main
+            <Box
+                component="main"
+                sx={{ position: "relative", flex: { md: 1 }, height: { xs: "45vh", md: "100%" }, minWidth: 0 }}
+            >
+                <ReactMapGL
+                    {...viewport}
+                    width="100%"
+                    height="100%"
+                    mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+                    mapStyle="mapbox://styles/jsonjung/ckx7qkqd423gj14s6axbpff2p"
+                    onViewportChange={setViewport}
+                >
+                    {jobList.map((job) => (
+                        <Marker
+                            key={job.id}
+                            latitude={job.latitude}
+                            longitude={job.longitude}
+                            offsetLeft={-PIN_SIZE / 2}
+                            offsetTop={-PIN_SIZE}
+                        >
+                            <Location
+                                job={job}
+                                active={hoveredJob?.id === job.id}
+                                selected={selectedJob?.id === job.id}
+                            />
+                        </Marker>
+                    ))}
+                    {popupJob && <JobPopup job={popupJob} />}
+                </ReactMapGL>
+
+                {searchMeta && jobList.length > 0 && (
+                    <Paper
+                        elevation={0}
+                        sx={{
+                            position: "absolute",
+                            top: 16,
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                            px: 2,
+                            py: 0.75,
+                            borderRadius: 999,
+                            border: 1,
+                            borderColor: "divider",
+                            boxShadow: "0 4px 14px rgba(15, 23, 42, 0.1)",
+                            whiteSpace: "nowrap",
+                            maxWidth: "calc(100% - 32px)",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                        }}
+                    >
+                        <Typography variant="body2" component="span" sx={{ fontWeight: 600 }}>
+                            {jobList.length} of {searchMeta.count.toLocaleString()} jobs
+                        </Typography>
+                        <Typography variant="body2" component="span" color="text.secondary">
+                            {" "}· “{searchMeta.keyword}” near {searchMeta.zipCode}
+                        </Typography>
+                    </Paper>
+                )}
+            </Box>
+        </Box>
+    );
+};
+
+export default Main;

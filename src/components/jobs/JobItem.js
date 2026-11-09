@@ -1,71 +1,67 @@
-import { Card, Typography, Box, Button } from '@mui/material'
-import React, { useState, useEffect } from 'react'
-import CompanyLogo from './CompanyLogo';
+import { Box, Card, CardActionArea, Stack, Typography } from "@mui/material";
+import { alpha } from "@mui/material/styles";
+import React from "react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import SalaryBadge from './SalaryBadge';
-import { useStoreState } from 'easy-peasy';
+import { MdOutlinePlace } from "react-icons/md";
+import CompanyLogo from "./CompanyLogo";
+import SalaryBadge from "./SalaryBadge";
 
-const JobItem = (props) => {
+dayjs.extend(relativeTime);
 
-    dayjs.extend(relativeTime)
-    const formatDate = dayjs(props.job.created).format("YYYY-MM-DD");
+export const postedAgo = (created) => dayjs(created).fromNow();
 
-    const selectedJob = useStoreState(state => state.selectedJob);
-
-    const [hovered, setHovered] = useState(false);
-    const [active, setActive] = useState(false);
-
-    useEffect(() => {
-        if (parseInt(props.id) === parseInt(props.job.id)) {
-            setActive(!active)
-        } else {
-            setActive(false);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.id]);
-
+const JobItem = ({ job, selected, highlighted, onSelect, onHover }) => {
     return (
-        <Card 
-            id={props.job.id}
-            className="job-item"
-            variant="outlined" 
-            sx={{ width: "100%", p: 2, cursor: "pointer", boxShadow: hovered ? 1 : 0, borderColor: active ? "primary.main" : "" }} 
-            onMouseEnter={() => setHovered(true)} 
-            onMouseLeave={() => setHovered(false)}
+        <Card
+            sx={{
+                borderColor: selected ? "primary.main" : highlighted ? "primary.light" : "divider",
+                bgcolor: (theme) => (selected ? alpha(theme.palette.primary.main, 0.04) : "background.paper"),
+                "&:hover": {
+                    borderColor: selected ? "primary.main" : "primary.light",
+                    boxShadow: "0 4px 14px rgba(15, 23, 42, 0.06)",
+                },
+            }}
+            onMouseEnter={() => onHover(job)}
+            onMouseLeave={() => onHover(null)}
         >
-            <Box sx={{ display: "flex", justifyContent: "space-between", marginBottom: 1 }}>
-                <CompanyLogo company={props.job.company.display_name}/>
-                <Typography variant='caption' sx={{ color: "#757575" }}>
-                    {dayjs(formatDate).fromNow()}
-                </Typography>
-            </Box>
-            {props.job?.salary_max && <SalaryBadge salary={props.job?.salary_max}/>}
-            <Box>
-                <Typography variant="body1" component="h1" sx={{ fontWeight: 'bold', textDecoration: hovered ? "underline" : "none", cursor: "pointer" }}>
-                    {props.job.title}
-                </Typography>
-                <Typography variant='body1'>
-                    {props.job.company.display_name}
-                </Typography>
-                <Typography variant='body1' sx={{ color: "#757575" }}>
-                    {props.job.location.display_name}
-                </Typography>
-            </Box>
-            {selectedJob?.id === props.job?.id && 
-            <Box>
-                <Box sx={{ marginTop: "1rem", marginBottom: "1.5rem" }}>
-                    <Typography variant='button' fontStyle={{ color: "#2196f3", display: "block" }}>Job Description</Typography>
-                    <Typography>
-                        {props.job?.description}
-                    </Typography>
-                </Box>
-                <a href={props.job?.redirect_url} target="_blank" rel="noopener noreferrer">
-                    <Button variant='contained' sx={{ width: "100%" }}>Apply</Button>
-                </a>
-            </Box>}
+            <CardActionArea onClick={() => onSelect(job)} sx={{ p: 2 }} aria-label={`${job.title} at ${job.company?.display_name}`}>
+                <Stack direction="row" spacing={1.75} alignItems="flex-start">
+                    <CompanyLogo company={job.company?.display_name} />
+                    <Box sx={{ minWidth: 0, flex: 1 }}>
+                        <Typography
+                            variant="subtitle1"
+                            component="h3"
+                            sx={{
+                                fontSize: "0.975rem",
+                                display: "-webkit-box",
+                                WebkitLineClamp: 2,
+                                WebkitBoxOrient: "vertical",
+                                overflow: "hidden",
+                            }}
+                        >
+                            {job.title}
+                        </Typography>
+                        <Typography variant="body2" sx={{ mt: 0.25 }} noWrap>
+                            {job.company?.display_name}
+                        </Typography>
+                        <Stack direction="row" alignItems="center" spacing={0.5} sx={{ color: "text.secondary", mt: 0.25 }}>
+                            <MdOutlinePlace size={14} style={{ flexShrink: 0 }} />
+                            <Typography variant="body2" color="text.secondary" noWrap>
+                                {job.location?.display_name}
+                            </Typography>
+                        </Stack>
+                        <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1} sx={{ mt: 1.25 }}>
+                            {job.salary_max ? <SalaryBadge salary={job.salary_max} /> : <span />}
+                            <Typography variant="caption" color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
+                                {postedAgo(job.created)}
+                            </Typography>
+                        </Stack>
+                    </Box>
+                </Stack>
+            </CardActionArea>
         </Card>
-    )
-}
+    );
+};
 
-export default JobItem
+export default JobItem;

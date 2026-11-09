@@ -1,76 +1,75 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from "react";
+import { Box, Button, CircularProgress, InputAdornment } from "@mui/material";
+import { MdSearch, MdOutlinePlace } from "react-icons/md";
 import Input from "../Input";
-import { Button } from "@mui/material";
-import { useStoreActions } from 'easy-peasy';
 
-const Form = (props) => {
+const ZIP_REGEX = /^\d{5}(?:[-\s]\d{4})?$/;
+const KEYWORD_REGEX = /\S+/;
 
+const Form = ({ onSearch, loading }) => {
     const [zipCode, setZipCode] = useState("");
     const [keyword, setKeyword] = useState("");
     const [zipCodeError, setZipCodeError] = useState(false);
     const [keywordError, setKeywordError] = useState(false);
-    const [disabled, setDisabled] = useState(false);
-    
-    const setJobs = useStoreActions(actions => actions.setJobs);
-    const setCenter = useStoreActions(actions => actions.setCenter);
-    const setSelectedId = useStoreActions(actions => actions.setSelectedId);
-    const setSelectedJob = useStoreActions(actions => actions.setSelectedJob);
 
+    const canSubmit = zipCode && keyword && !zipCodeError && !keywordError && !loading;
 
-    useEffect(() => {
-        if (zipCodeError || keywordError) {
-            setDisabled(true);
-        } else {
-            setDisabled(false);
-        }
-    }, [zipCodeError, keywordError]);
-
-    const handleSearch = e => {
-        let baseURL = `https://api.adzuna.com/v1/api/jobs/us/search/1?results_per_page=30&app_id=${process.env.REACT_APP_ADZUNA_APPID}&app_key=${process.env.REACT_APP_ADZUNA_KEY}`;
-
+    const handleSubmit = (e) => {
         e.preventDefault();
-        
-        if (zipCode && keyword)
-            props.setLoading(true);
-            props.setCurrentURL(`${baseURL}&where=${zipCode}&title_only=${keyword}`);
-            fetch(`${baseURL}&where=${zipCode}&title_only=${keyword}`)
-            .then(res => res.json())
-            .then(data => {
-                props.setPageCount(Math.ceil(data.count / 50));
-                props.setLoading(false);
-                setSelectedId(0);
-                setSelectedJob(null);
-                if (data.results.length === 0) {
-                    return props.setNoResults(true);
-                }
-                props.setNoResults(false);
-                setCenter([data.results[0].latitude, data.results[0].longitude]);
-                return setJobs(data.results);
-            });
-    }
+        if (!canSubmit) return;
+        onSearch({ zipCode, keyword });
+    };
 
-  return (
-    <form onSubmit={e => handleSearch(e)} style={{ paddingTop: "1rem" }}>
-        <Input 
-            label="Zip Code" 
-            variant="standard" 
-            sx={{width: "100%", marginBottom: "0.5rem"}} 
-            regex={/^\d{5}(?:[-\s]\d{4})?$/} 
-            setInput={setZipCode}
-            setError={setZipCodeError}
-        />
-        <Input 
-            label="Keyword (Engineer, Analyst, etc.)" variant="standard" 
-            sx={{width: "100%"}} 
-            regex={/.*/} 
-            setInput={setKeyword}
-            setError={setKeywordError}
-        />
-        <Button type="submit" variant="contained" sx={{ width: "100%", marginTop: "1rem" }} disabled={disabled}>
-            Search
-        </Button>
-    </form>
-  );
+    return (
+        <Box component="form" onSubmit={handleSubmit} noValidate>
+            <Box sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, columnGap: 1.5 }}>
+                <Input
+                    label="Job title or keyword"
+                    name="keyword"
+                    placeholder="e.g. Engineer, Analyst"
+                    sx={{ flex: 3 }}
+                    regex={KEYWORD_REGEX}
+                    errorText="Enter a keyword"
+                    setInput={setKeyword}
+                    setError={setKeywordError}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <MdSearch size={18} />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+                <Input
+                    label="Zip code"
+                    name="zip"
+                    placeholder="90012"
+                    sx={{ flex: 2 }}
+                    regex={ZIP_REGEX}
+                    errorText="Enter a 5-digit zip code"
+                    setInput={setZipCode}
+                    setError={setZipCodeError}
+                    inputProps={{ inputMode: "numeric", maxLength: 10 }}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <MdOutlinePlace size={18} />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </Box>
+            <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                disabled={!canSubmit}
+                startIcon={loading ? <CircularProgress size={16} color="inherit" /> : <MdSearch size={18} />}
+            >
+                {loading ? "Searching…" : "Search jobs"}
+            </Button>
+        </Box>
+    );
 };
 
 export default Form;
