@@ -1,43 +1,30 @@
-import { List, ListItem, Typography } from '@mui/material';
+import { Stack } from "@mui/material";
+import React from "react";
+import { useStoreActions, useStoreState } from "easy-peasy";
 import JobItem from "./JobItem";
-import React from 'react';
-import { useStoreState, useStoreActions } from 'easy-peasy';
+import useJobSelection from "../../hooks/useJobSelection";
 
-const JobList = (props) => {
-
-    const selectedId = useStoreState(state => state.selectedId);
-    const setSelectedId = useStoreActions(actions => actions.setSelectedId);
-    const setSelectedJob = useStoreActions(actions => actions.setSelectedJob);
-    const setHoveredJob = useStoreActions(actions => actions.setHoveredJob);
-    const setCenter = useStoreActions(actions => actions.setCenter);
+const JobList = ({ jobList }) => {
+    const selectedJob = useStoreState((state) => state.selectedJob);
+    const hoveredJob = useStoreState((state) => state.hoveredJob);
+    const setHoveredJob = useStoreActions((actions) => actions.setHoveredJob);
+    const { selectJob } = useJobSelection();
 
     return (
-        <List sx={{ marginTop: 2 }}>
-            {props.jobList.length > 0 ? 
-            <Typography variant="body2" sx={{ color: "#757575", marginBottom: 1 }}>
-                {props.jobList.length} jobs
-            </Typography> :
-            <></>}
-            {props.jobList.map(job => {
-                return (
-                    <ListItem 
-                        id={job.id} 
-                        key={job.id} 
-                        sx={{ p: 0, marginBottom: 2 }} 
-                        onClick={e => {
-                            setSelectedJob(job);
-                            setCenter([job.latitude, job.longitude]);
-                            return setSelectedId(e.target.offsetParent.id);
-                        }}
-                        onMouseEnter={() => setHoveredJob(job)}
-                        onMouseLeave={() => setHoveredJob(null)}
-                    >
-                        <JobItem job={job} id={selectedId}/>
-                    </ListItem>
-                )
-            })}
-        </List>
-    )
-}
+        <Stack spacing={1.5} component="ul" sx={{ listStyle: "none", p: 0, m: 0 }}>
+            {jobList.map((job) => (
+                <li key={job.id}>
+                    <JobItem
+                        job={job}
+                        selected={selectedJob?.id === job.id}
+                        highlighted={hoveredJob?.id === job.id}
+                        onSelect={selectJob}
+                        onHover={setHoveredJob}
+                    />
+                </li>
+            ))}
+        </Stack>
+    );
+};
 
-export default JobList
+export default JobList;
